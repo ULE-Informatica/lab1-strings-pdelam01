@@ -1,19 +1,8 @@
-/**
- *  
- * The student needs to compile, test and comment the source code file.
- * 
- * Enumerate those Rules and Recommendation associated that are broken in the 
- *     previous source code file.
- * Enumerate he compilation tools and paramenters (gcc vs g++ ), -Wall ...
- * Enumerate the standard associated  -std=c99, -std=c11
- * 
- * There are several variants. You should choose at least two. You can also try clang.
- * At the end the source code  should compile without warnings to the variant 
- *     selected (you can remove/change instructions).
- */
-
-
-/* In this code I have written the list of the all the rules and recommendations that have been broken. */
+/*
+*  Commands used for compiling the code: 
+*     gcc ejemplo1.c -o ej1_std11 -Wall -pedantic -std=c11
+*     g++ ejemplo1.c -o ej1_std11 -Wall -pedantic -std=c11
+*/
 
 #include <stdio.h>
 #include <string.h>
@@ -53,7 +42,7 @@ void get_y_or_n(void) {
 	char response[8];
 
 	printf("Continue? [y] n: ");  
-	gets(response);   /* --> MSC34-C: Do not use deprecated or obsolescent functions <-- */
+	gets(response);
 
 	if (response[0] == 'n') 
 		exit(0);  
@@ -68,14 +57,14 @@ int main(int argc, char *argv[])
     char response[8];
     char array3[16];
     char array4[16];
-    char array5 []  = "01234567890123456";  
+    char array5 []  = "01234567890123456";
     char *ptr_char  = "new string literal";
     int size_array1 = strlen("аналитик");
     int size_array2 = 100;
     
-   // char analitic1[size_array1]="аналитик";  /* --> STR11-C: Do not specify the bound of a character array initialized with a string literal <--*/
-   // char analitic2[size_array2]="аналитик";  /* --> STR11-C: Do not specify the bound of a character array initialized with a string literal <--*/
-    char analitic3[100]="аналитик";            /* --> STR11-C: Do not specify the bound of a character array initialized with a string literal <--*/
+   // char analitic1[size_array1]="аналитик";
+   // char analitic2[size_array2]="аналитик";
+    char analitic3[100]="аналитик";
 
     puts(get_dirname(__FILE__));
 
@@ -103,7 +92,7 @@ int main(int argc, char *argv[])
     strncpy(array4, array3, strlen(array3));
     
     array5 [0] = 'M';
-    ptr_char [0] = 'N';   /* --> STRC30-C: Do not modify string literals <-- */
+    ptr_char [0] = 'N';
     
     array3[sizeof(array3)-1]='\0';
     
