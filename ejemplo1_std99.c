@@ -1,7 +1,7 @@
 /*
 *  Commands used for compiling the code: 
 *     gcc ejemplo1.c -o ej1_std99 -Wall -pedantic -std=c99
-*     g++ ejemplo1.c -o ej1_std99 -Wall -pedantic -std=c99
+*     g++ ejemplo1.c -o ej1_std99 -Wall -pedantic -std=c++98
 */
 
 #include <stdio.h>
@@ -38,7 +38,8 @@ void gets_example_func(void) {
  
   if (fgets(buf, sizeof(buf), stdin) == NULL) {
         return 1; /* 
-                  * Return in a void function
+                  *  Return in a void function
+                  *
                   *  g++ --> error
                   *  gcc --> warning
                   */
@@ -54,7 +55,7 @@ const char *get_dirname(const char *pathname) {
                                   *  const char* is a mutable pointer to an immutable character
                                   *
                                   *  g++ --> error
-                                  *  gcc --> no detected
+                                  *  gcc --> not detected
                                   */
   if (slash) {
     *slash = '\0'; /* Undefined behavior */
@@ -65,20 +66,20 @@ const char *get_dirname(const char *pathname) {
 
 void get_y_or_n(void) {  
 	char response[8];  /* 
-                      * Only need response[2] for y/n and /0 
+                      *  Only need response[2] for y/n and /0 
                       *
-                      * Undefined behavior if we enter +8 characters
+                      *  Undefined behavior if we enter +8 characters
                       */
 
 	printf("Continue? [y] n: ");  
 	gets(response);   /* 
-                    *  gets is deprecated, it does not check the size of the buffer
-                    * 
-                    *  Solution: fgets(response, sizeof(response), stdin); 
-                    * 
-                    *  g++ --> error
-                    *  gcc --> warning
-                    */
+                     *  gets is deprecated, it does not check the size of the buffer
+                     * 
+                     *  Solution: fgets(response, sizeof(response), stdin); 
+                     * 
+                     *  g++ --> ‘char* gets(char*)’ is deprecated
+                     *  gcc --> ‘gets’ is deprecated 
+                     */
 
 	if (response[0] == 'n') 
 		exit(0);  
@@ -99,6 +100,9 @@ int main(int argc, char *argv[])
                                              * 
                                              * Solution: const char *ptr_char = "new string literal";
                                              *           char ptr_char[] = "new string literal";
+                                             * 
+                                             * g++ --> deprecated conversion from string constant to ‘char*’
+                                             * gcc --> not detected
                                              */
 
     int size_array1 = strlen("аналитик"); /* Unused variable */
@@ -108,9 +112,11 @@ int main(int argc, char *argv[])
    // char analitic2[size_array2]="аналитик";
     char analitic3[100]="аналитик"; /* Unused variable */
 
-    puts(get_dirname(__FILE__));
+    puts(get_dirname(__FILE__));  /* 
+                                   * g++ --> deprecated conversion from string constant to ‘char*’ 
+                                   * gcc --> not detected
+                                   */
 
-        
     strcpy(key, argv[1]);  
     strcat(key, " = ");  
     strcat(key, argv[2]);  

@@ -13,7 +13,10 @@
  */
 
 
-/* In this code I have written the list of the all the rules and recommendations that have been broken. */
+/* 
+ *  In this code I have written the list of the all the rules and recommendations that have been broken. 
+ *  Running: 'gcc ejemplo1.c -o ej1 -Wall -pedantic -std=c99 -fsanitize=address' the warnings will desappear
+ */
 
 #include <stdio.h>
 #include <string.h>
@@ -23,10 +26,11 @@ char array1[] = "Foo" "bar";
 char array2[] = { 'F', 'o', 'o', 'b', 'a', 'r', '\0' };
  
 enum { BUFFER_MAX_SIZE = 1024 };
- 
-const char* s1 = R"foo(
-Hello
-World
+
+//const char* s1 = R"foo( ... )foo";
+const char* s1 = "foo(\
+Hello\
+World\
 )foo";
 const char* s2 = "\nHello\nWorld\n";
 
@@ -34,7 +38,7 @@ void gets_example_func(void) {
   char buf[BUFFER_MAX_SIZE];
  
   if (fgets(buf, sizeof(buf), stdin) == NULL) {
-        return 1;
+        //return 1;
   }
   buf[strlen(buf) - 1] = '\0';
 }
@@ -53,12 +57,13 @@ void get_y_or_n(void) {
 	char response[8];
 
 	printf("Continue? [y] n: ");  
-	gets(response);   /* --> MSC34-C: Do not use deprecated or obsolescent functions <--
+	//gets(response);   
+                   /* --> MSC34-C: Do not use deprecated or obsolescent functions <--
                     *      Solution: fgets(response, sizeof(response), stdin);
                     *
                     * Undefined behavior if we enter +8 characters
                     */
-
+  fgets(response,sizeof(response),stdin);
 	if (response[0] == 'n')  /* --> STR35-C: Do not copy data from an unbounded source into a fixed-size buffer <-- */
 		exit(0);  
 
@@ -74,15 +79,15 @@ int main(int argc, char *argv[])
     char array4[16];
     char array5 []  = "01234567890123456";  
     char *ptr_char  = "new string literal";
-    int size_array1 = strlen("аналитик");
-    int size_array2 = 100;
+    //int size_array1 = strlen("аналитик"); /* Unused */
+    //int size_array2 = 100;                /* Unused */
     
    // char analitic1[size_array1]="аналитик";  /* --> STR11-C: Do not specify the bound of a character array initialized with a string literal <--*/
    // char analitic2[size_array2]="аналитик";  /* --> STR11-C: Do not specify the bound of a character array initialized with a string literal <--*/
-    char analitic3[100]="аналитик";            /* --> STR11-C: Do not specify the bound of a character array initialized with a string literal <--*/
+    //char analitic3[100]="аналитик";          /* --> STR11-C: Do not specify the bound of a character array initialized with a string literal <--*/
                                                /*     Solution: analitic3[]="аналитик"; */
 
-    puts(get_dirname(__FILE__));
+    puts(get_dirname(__FILE__)); 
 
         
     strcpy(key, argv[1]);  /* --> STR35-C: Do not copy data from an unbounded source into a fixed-size buffer <-- 
