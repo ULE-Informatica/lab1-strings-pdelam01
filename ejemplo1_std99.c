@@ -12,7 +12,7 @@ char array1[] = "Foo" "bar";
 char array2[] = { 'F', 'o', 'o', 'b', 'a', 'r', '\0' };
  
 enum { BUFFER_MAX_SIZE = 1024 };
-/* R or L is not used on C, it is used on C++
+/* R or L is not used in C, it is used in C++
 *  
 *  L --> means wchar_t (wide character)
 *  "A" = 41
@@ -28,7 +28,7 @@ enum { BUFFER_MAX_SIZE = 1024 };
 const char* s1 = R"foo(  
 Hello
 World
-)foo";*/
+)foo"; */
 
 const char* s1 = "foo(\nHello\nWorld\n)foo";   /* Null-terminated string literal char * */
 const char* s2 = "\nHello\nWorld\n";
@@ -43,6 +43,7 @@ void gets_example_func(void) {
                   *  gcc --> warning
                   */
   }
+
   buf[strlen(buf) - 1] = '\0';
 }
 
@@ -63,7 +64,11 @@ const char *get_dirname(const char *pathname) {
  
 
 void get_y_or_n(void) {  
-	char response[8];  /* Only need response[2] for y/n and /0 */
+	char response[8];  /* 
+                      * Only need response[2] for y/n and /0 
+                      *
+                      * Undefined behavior if we enter +8 characters
+                      */
 
 	printf("Continue? [y] n: ");  
 	gets(response);   /* 
@@ -89,20 +94,26 @@ int main(int argc, char *argv[])
     char array3[16];
     char array4[16];
     char array5 []  = "01234567890123456";  
-    char *ptr_char  = "new string literal";
-    int size_array1 = strlen("аналитик");
-    int size_array2 = 100;
+    char *ptr_char  = "new string literal"; /* 
+                                             * ISO C++ forbids converting a string constant to ‘char*’ 
+                                             * 
+                                             * Solution: const char *ptr_char = "new string literal";
+                                             *           char ptr_char[] = "new string literal";
+                                             */
+
+    int size_array1 = strlen("аналитик"); /* Unused variable */
+    int size_array2 = 100;  /* Unused variable */
     
    // char analitic1[size_array1]="аналитик";
    // char analitic2[size_array2]="аналитик";
-    char analitic3[100]="аналитик";
+    char analitic3[100]="аналитик"; /* Unused variable */
 
     puts(get_dirname(__FILE__));
 
         
     strcpy(key, argv[1]);  
     strcat(key, " = ");  
-    strcat(key, argv[2]);
+    strcat(key, argv[2]);  
 
 
     fgets(response,sizeof(response),stdin);

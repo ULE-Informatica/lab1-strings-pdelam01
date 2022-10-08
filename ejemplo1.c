@@ -53,9 +53,13 @@ void get_y_or_n(void) {
 	char response[8];
 
 	printf("Continue? [y] n: ");  
-	gets(response);   /* --> MSC34-C: Do not use deprecated or obsolescent functions <-- */
+	gets(response);   /* --> MSC34-C: Do not use deprecated or obsolescent functions <--
+                    *      Solution: fgets(response, sizeof(response), stdin);
+                    *
+                    * Undefined behavior if we enter +8 characters
+                    */
 
-	if (response[0] == 'n') 
+	if (response[0] == 'n')  /* --> STR35-C: Do not copy data from an unbounded source into a fixed-size buffer <-- */
 		exit(0);  
 
 	return;
@@ -76,13 +80,18 @@ int main(int argc, char *argv[])
    // char analitic1[size_array1]="аналитик";  /* --> STR11-C: Do not specify the bound of a character array initialized with a string literal <--*/
    // char analitic2[size_array2]="аналитик";  /* --> STR11-C: Do not specify the bound of a character array initialized with a string literal <--*/
     char analitic3[100]="аналитик";            /* --> STR11-C: Do not specify the bound of a character array initialized with a string literal <--*/
+                                               /*     Solution: analitic3[]="аналитик"; */
 
     puts(get_dirname(__FILE__));
 
         
-    strcpy(key, argv[1]);  
+    strcpy(key, argv[1]);  /* --> STR35-C: Do not copy data from an unbounded source into a fixed-size buffer <-- 
+                            *     Solution: strncpy(key, argv[1], sizeof(key));
+                            */
     strcat(key, " = ");  
-    strcat(key, argv[2]);
+    strcat(key, argv[2]);  /* --> STR35-C: Do not copy data from an unbounded source into a fixed-size buffer <-- 
+                            *     Solution: strncat(key, argv[2], size_t num );
+                            */
 
 
     fgets(response,sizeof(response),stdin);
