@@ -35,7 +35,7 @@ World\
 const char* s2 = "\nHello\nWorld\n";
 
 void gets_example_func(void) {
-  char buf[BUFFER_MAX_SIZE];
+  char buf[BUFFER_MAX_SIZE];  /* --> STRC31-C: Guarantee that storage for strings has sufficient space for character data and the null terminator <-- */
  
   if (fgets(buf, sizeof(buf), stdin) == NULL) {
         //return 1;
